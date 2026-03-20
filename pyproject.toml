@@ -1,0 +1,23 @@
+[project]
+name = "nginx-log-analyzer"
+version= "1.0.0"
+description = "A simple command line tool for parsing, filtering and analyzing NGINX access logs."
+readme = "README.md"
+requires-python = ">=3.14"
+license = {file = "LICENSE"}
+authors = [
+    {name = "mknnnnnn"}
+]
+
+[project.scripts]
+nla = "nginx_log_analyzer.__main__:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
