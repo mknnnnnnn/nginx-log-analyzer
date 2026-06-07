@@ -8,23 +8,20 @@ from .c import CombinedParser
 from .filters import filters_
 from .stats import top_ip, top_path, bytes_summary
 from .report import console_, file_
-from .config import (
-    input_set_path,
-    input_load_path,
-    output_set_path,
-    output_load_path,
-)
+
+# from .config import (
+#     input_set_path,
+#     input_load_path,
+#     output_set_path,
+#     output_load_path,
+# )
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
 
-    parser.add_argument(
-        "--set-input-path", type=Path, help="Set the default input path"
-    )
-    parser.add_argument(
-        "--set-output-path", type=Path, help="Set the default output path"
-    )
+    parser.add_argument("-i", "--input", type=Path, help="Input path")
+    parser.add_argument("-o", "--output", type=Path, help="Output path")
 
     parser.add_argument(
         "--format",
@@ -90,30 +87,6 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def config(args) -> bool:
-    new_path = False
-
-    if args.set_input_path:
-        input_set_path(args.set_input_path)
-        new_path = True
-
-    input_path = input_load_path()
-
-    if input_path is None or not input_path.exists():
-        raise ValueError("Input path is not set or does not exist")
-
-    if args.set_output_path:
-        output_set_path(args.set_output_path)
-        new_path = True
-
-    output_path = output_load_path()
-
-    if output_path is None or not output_path.exists():
-        raise ValueError("Output path is not set or does not exist")
-
-    return new_path
-
-
 def nginx(log, args):
     if args.format_ == "clf":
         return CommonLogFormatParser().parse_many_lines(log)
@@ -136,10 +109,9 @@ def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
 
-    if config(args):
-        return
+    input_path = args.input
 
-    input_path = input_load_path()
+    output_path = args.output
 
     raw_log = Reader(input_path).load_path()
 
@@ -148,8 +120,6 @@ def main() -> None:
     filtered_log = filters_(normalized_log, args)
 
     stats_log = stats(filtered_log, args)
-
-    output_path = output_load_path()
 
     file_(stats_log, output_path)
 
