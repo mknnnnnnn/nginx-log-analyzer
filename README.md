@@ -1,7 +1,9 @@
 # NGINX Log Analyzer
 
 A simple command line tool for parsing, filtering and analyzing NGINX access logs.
-Supports combined and common log format with filtering and basic statistics.
+Supports combined and common log format with filtering and basic statistics. 
+
+The repository includes example log files that can be used for testing.
 
 ## Features
 
@@ -26,7 +28,33 @@ Supports combined and common log format with filtering and basic statistics.
 - Top requested paths
 - Bytes summary
 
-## Installation
+## Setup - Docker Compose
+
+Clone the repository:
+```bash
+git clone https://github.com/mknnnnnnn/nginx-log-analyzer.git
+cd nginx-log-analyzer
+```
+
+Run Docker Compose:
+```bash
+docker compose run --rm nla --help
+```
+
+The local `logs` directory is mounted as `/logs` inside the container.
+The local `results` directory is mounted as `/results` inside the container.
+
+### Usage
+```bash
+docker compose run --rm nla -i /logs -o /results/results.json --format c --ip 127.0.0.1 --show
+docker compose run --rm nla -i /logs -o /results/results.json --format c --method POST GET --show
+docker compose run --rm nla -i /logs -o /results/results.json --format clf --ip 192.168.1.10 --show
+docker compose run --rm nla -i /logs -o /results/results.json --format c --method GET --path /admin /api --show
+```
+
+Place NGINX access log files in the `logs` directory. Output files will be saved in the `results` directory.
+
+## Setup - Local
 
 Clone the repository and install the package:
 
@@ -43,15 +71,12 @@ After the installation the CLI command will be available:
 nla --help
 ```
 
-## Usage
-Set your input directory and output file:
+### Usage
 ```bash
-nla --set-input-path "/Users/User/Desktop/Logs/input/" --set-output-path "/Users/User/Desktop/Logs/output.json"
+nla -i /path/to/logs -o /path/to/results.json --format c --ip 127.0.0.1 --show
+nla -i /path/to/logs -o /path/to/results.json --format c --method POST GET --show
+nla -i /path/to/logs -o /path/to/results.json --format clf --ip 192.168.1.10 --show
+nla -i /path/to/logs -o /path/to/results.json --format c --method GET --path /admin /api --show
 ```
 
-## Example
-```bash
-nla --format c --method POST GET --show
-nla --format clf --ip 192.168.1.10 --show
-nla --format c --method GET --path /admin /api --show
-```
+Place NGINX access log files in the `logs` directory. Output files will be saved in the `results` directory.
