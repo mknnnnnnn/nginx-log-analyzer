@@ -1,0 +1,7 @@
+services:
+  nla:
+    build: .
+    container_name: nla
+    volumes:
+      - ./logs:/logs:ro
+      - ./results:/results
