@@ -3,7 +3,7 @@ name = "nginx-log-analyzer"
 version= "1.0.0"
 description = "A simple command line tool for parsing, filtering and analyzing NGINX access logs."
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.12"
 license = {file = "LICENSE"}
 authors = [
     {name = "mknnnnnn"}
